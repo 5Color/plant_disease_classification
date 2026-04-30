@@ -1,30 +1,94 @@
-# plant_disease_classification
+# Plant Disease Classification
 
-이번에 식물 병해충 진단을 해주는 AI프로그램을 만드는 프로젝트를 진행하였다.
-우선 프로젝트를 진행하기 위한 라이브러리를 불러온다.
-[ pandas, os, PIL, sklearn, torch, torchvision, numpy, tqdm ]
-ㄴ 해당 라이브러리를 import하고 캐글에 있는 Plant Pathology 2020 - FGVC7데이터를 가져온다
-train.csv를 확인하기 위해 pandas의 read_csv함수를 사용해 데이터를 불러와 확인한다.
+Plant Pathology 2020 - FGVC7 데이터셋을 활용해 사과 잎 이미지를 4개 질병 상태로 분류하는 딥러닝 프로젝트입니다.
 
-1. 첫번째로 진행할것은 라벨전처리이다.
-2. 데이터셋 클래스 정의
-3. 데이터 분할 test_size=0.2로 해주고 train_df, val_df 에 한다.
-4. 이미지를 전처리해준다.
-5. 데이터로더 정의.
-6. 모델 정의를 하는데 cuda를 사용하고,  모델은 resnext50_32x4d로 사전학습된 모델을 쓰며, '
-  fully_connected의 출력 층 클래스 수는 4개이다.
- - loss Function : CrossEntropyLoss()
- - optimizer : NAdam을 쓴다 - learning_rate는 1e-4로 0.0001
-7. 학습단계 : tqdm라이브러리를 호출, 학습을 진행할때 과적합을 막기 위한 EarlyStopping 클래스 정의
-   - ephoch을 50으로 잡고, 학습시작한다
-8. 모델 저장
+## 프로젝트 개요
 
-9. 이제 이미지를 예측할 차례이다. 모델 학습을 할때 데이터를 전처리 했는데 tensor로 학습됐으니 우리도 tensor값으로 전처리해주고
-   이미지를 예측함수에 넣어야한다.
-10. 마지막으로 예측할 이미지의경로를 설정해서, image.view(데이터갯수, 채널, 가로, 세로)이런식으로 넣어서 추론한다.
-11. 직관적으로 보기위하여 label_map = ['healthy', 'multiple_diseases', 'rust', 'scab']리스트 선언해서 result를 label에 인덱싱한다/.
+이 프로젝트는 잎 이미지 한 장을 입력받아 아래 클래스 중 하나로 분류합니다.
 
+- `healthy`: 정상 잎
+- `multiple_diseases`: 복합 질병
+- `rust`: 녹병
+- `scab`: 검은별무늬병
 
-12. 근데 예측을 해보니 죄다 rust만 나온다 확인해보니 전체데이터 다 rust는 아니지만 rust가 높은 확률로 예측되었다.
-13. 이를 해결하기 위해 예측값 아웃풋 데이터 분포를 확인해보니 1인덱스인 'multiple_diseases' 15개로 불균형되어있었다.
-그래서 클래스 불균형 보완용 Sampler를 사용하여 가중치를 섞어주는 전처리 작업을 했다.
+모델은 ImageNet 사전학습 가중치를 사용한 `ResNeXt50_32x4d` 기반 전이학습 방식으로 구성했습니다.
+
+## 사용 데이터
+
+데이터셋: Plant Pathology 2020 - FGVC7
+
+학습 데이터의 클래스 분포는 불균형합니다. 특히 `multiple_diseases` 클래스의 샘플 수가 적어, 해당 클래스에 더 강한 augmentation과 샘플 복제를 적용했습니다.
+
+## 주요 구현 내용
+
+- `pandas`로 `train.csv` 라벨 로드
+- `PIL`과 `torchvision.transforms`를 활용한 이미지 전처리
+- train/validation 데이터 분리
+- 클래스별 라벨 매핑 생성
+- `multiple_diseases` 클래스 보완을 위한 데이터 증강
+- ImageNet 사전학습 `ResNeXt50_32x4d` 모델 사용
+- 마지막 fully connected layer를 4개 클래스 출력으로 교체
+- `CrossEntropyLoss` 기반 학습
+- Early Stopping 적용
+- validation 성능 평가 및 classification report 출력
+- 학습된 모델을 `resnext_model.pth`로 저장
+
+## 모델 설정
+
+```python
+MODEL = ResNeXt50_32x4d
+WEIGHTS = ImageNet1K V1
+NUM_CLASSES = 4
+IMAGE_SIZE = 224x224
+NUM_EPOCHS = 30
+EARLY_STOPPING_PATIENCE = 3
+```
+
+## 성능
+
+노트북 실행 결과 기준 validation accuracy는 약 `93.97%`입니다.
+
+클래스별 성능에서 `rust`는 높은 정밀도와 재현율을 보였고, `multiple_diseases`는 데이터 수가 적어 다른 클래스보다 상대적으로 낮은 성능을 보였습니다.
+
+## 파일 구성
+
+```text
+.
+├── main.ipynb       # 학습, 평가, 예측 코드가 담긴 노트북
+├── README.md        # 프로젝트 설명
+└── .gitattributes
+```
+
+데이터셋 이미지, CSV 파일, 모델 가중치(`.pth`)는 용량 문제로 저장소에 포함하지 않았습니다.
+
+## 실행 방법
+
+1. Plant Pathology 2020 - FGVC7 데이터셋을 준비합니다.
+2. `main.ipynb`와 같은 위치에 `images/`, `train.csv`, `test.csv`를 배치합니다.
+3. 필요한 라이브러리를 설치합니다.
+
+```bash
+pip install pandas numpy pillow scikit-learn torch torchvision tqdm matplotlib
+```
+
+4. Jupyter Notebook에서 `main.ipynb`를 순서대로 실행합니다.
+
+## 사용 라이브러리
+
+- Python
+- pandas
+- numpy
+- Pillow
+- scikit-learn
+- PyTorch
+- torchvision
+- tqdm
+- matplotlib
+
+## 개선 방향
+
+- 불균형 클래스에 대한 추가 데이터 확보
+- confusion matrix 기반 오류 분석
+- 더 다양한 augmentation 실험
+- EfficientNet, ConvNeXt 등 다른 backbone과 성능 비교
+- 학습 코드와 추론 코드를 `.py` 파일로 분리

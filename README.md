@@ -46,7 +46,9 @@ EARLY_STOPPING_PATIENCE = 3
 
 ## 성능
 
-노트북 실행 결과 기준 validation accuracy는 약 `93.97%`이다..!
+노트북 실행 결과 기준 학습 중 가장 높은 validation accuracy는 약 `94.52%`이다..!
+
+최종 평가에서 validation accuracy는 약 `93.97%`, validation macro F1은 약 `0.8889`를 기록했다
 
 클래스별 성능에서 `rust`는 높은 정밀도와 재현율을 보였고, `multiple_diseases`는 데이터 수가 적어 다른 클래스보다 상대적으로 낮은 성능을 보였다
 

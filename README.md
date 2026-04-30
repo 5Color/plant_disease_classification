@@ -17,7 +17,7 @@ Plant Pathology 2020 - FGVC7 데이터셋을 활용해 사과 잎 이미지를 4
 
 데이터셋: Plant Pathology 2020 - FGVC7
 
-학습 데이터의 클래스 분포는 불균형하다. 특히 `multiple_diseases` 클래스의 샘플 수가 적어, 해당 클래스에 더 강한 augmentation과 샘플 복제를 적용했다.
+학습 데이터의 클래스 분포는 불균형하다.. 특히 `multiple_diseases` 클래스의 샘플 수가 적어, 해당 클래스에 더 강한 augmentation과 샘플 복제를 적용했다.
 
 ## 주요 구현 내용
 

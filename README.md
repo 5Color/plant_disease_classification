@@ -1,23 +1,23 @@
 # Plant Disease Classification
 
-Plant Pathology 2020 - FGVC7 데이터셋을 활용해 사과 잎 이미지를 4개 질병 상태로 분류하는 딥러닝 프로젝트입니다.
+Plant Pathology 2020 - FGVC7 데이터셋을 활용해 사과 잎 이미지를 4개 질병 상태로 분류하는 딥러닝 프로젝트이다
 
 ## 프로젝트 개요
 
-이 프로젝트는 잎 이미지 한 장을 입력받아 아래 클래스 중 하나로 분류합니다.
+이 프로젝트는 잎 이미지 한 장을 입력받아 아래 클래스 중 하나로 분류한다
 
 - `healthy`: 정상 잎
 - `multiple_diseases`: 복합 질병
 - `rust`: 녹병
-- `scab`: 검은별무늬병
+- `scab`: 더뎅이병
 
-모델은 ImageNet 사전학습 가중치를 사용한 `ResNeXt50_32x4d` 기반 전이학습 방식으로 구성했습니다.
+모델은 ImageNet 사전학습 가중치를 사용한 `ResNeXt50_32x4d` 기반 전이학습 방식으로 구성했다
 
 ## 사용 데이터
 
 데이터셋: Plant Pathology 2020 - FGVC7
 
-학습 데이터의 클래스 분포는 불균형합니다. 특히 `multiple_diseases` 클래스의 샘플 수가 적어, 해당 클래스에 더 강한 augmentation과 샘플 복제를 적용했습니다.
+학습 데이터의 클래스 분포는 불균형하다. 특히 `multiple_diseases` 클래스의 샘플 수가 적어, 해당 클래스에 더 강한 augmentation과 샘플 복제를 적용했다.
 
 ## 주요 구현 내용
 
@@ -46,9 +46,9 @@ EARLY_STOPPING_PATIENCE = 3
 
 ## 성능
 
-노트북 실행 결과 기준 validation accuracy는 약 `93.97%`입니다.
+노트북 실행 결과 기준 validation accuracy는 약 `93.97%`이다..!
 
-클래스별 성능에서 `rust`는 높은 정밀도와 재현율을 보였고, `multiple_diseases`는 데이터 수가 적어 다른 클래스보다 상대적으로 낮은 성능을 보였습니다.
+클래스별 성능에서 `rust`는 높은 정밀도와 재현율을 보였고, `multiple_diseases`는 데이터 수가 적어 다른 클래스보다 상대적으로 낮은 성능을 보였다
 
 ## 파일 구성
 
@@ -59,19 +59,19 @@ EARLY_STOPPING_PATIENCE = 3
 └── .gitattributes
 ```
 
-데이터셋 이미지, CSV 파일, 모델 가중치(`.pth`)는 용량 문제로 저장소에 포함하지 않았습니다.
+데이터셋 이미지, CSV 파일, 모델 가중치(`.pth`)는 용량 문제로 저장소에 포함하지 않는다
 
 ## 실행 방법
 
-1. Plant Pathology 2020 - FGVC7 데이터셋을 준비합니다.
-2. `main.ipynb`와 같은 위치에 `images/`, `train.csv`, `test.csv`를 배치합니다.
-3. 필요한 라이브러리를 설치합니다.
+1. Plant Pathology 2020 - FGVC7 데이터셋을 준비한다
+2. `main.ipynb`와 같은 위치에 `images/`, `train.csv`, `test.csv`를 배치한다
+3. 필요한 라이브러리를 설치한다
 
 ```bash
 pip install pandas numpy pillow scikit-learn torch torchvision tqdm matplotlib
 ```
 
-4. Jupyter Notebook에서 `main.ipynb`를 순서대로 실행합니다.
+4. Jupyter Notebook에서 `main.ipynb`를 순서대로 실행한다
 
 ## 사용 라이브러리
 
